@@ -18,7 +18,7 @@ if __name__ == "__main__":
 from tools.graph_utils import graph_from_node, whole_graph_from_node, has_NC, induced_edge_filter
 from tools.learning_utils import inference_on_graph_run
 from tools.drawing import rna_draw, rna_draw_pair, rna_draw_grid
-from motif_build.meta_graph import MGraph, MGraphAll
+from meta_graph import MGraph, MGraphAll #this import was fixed, original build_motifs.meta_graph
 
 
 def parse_json(json_file):
