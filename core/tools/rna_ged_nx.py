@@ -30,20 +30,20 @@ sub_matrix[1:,0] = sys.maxsize
 
 
 edge_map = {'B53': 0, 'CHH': 1, 'CHS': 2, 'CHW': 3, 'CSH': 2, 'CSS': 4, 'CSW': 5, 'CWH': 3, 'CWS': 5, 'CWW': 6,
-            'THH': 7, 'THS': 8, 'THW': 9, 'TSH': 8, 'TSS': 10, 'TSW': 11, 'TWH': 9, 'TWS': 11, 'TWW': 12}
+            'THH': 7, 'THS': 8, 'THW': 9, 'TSH': 8, 'TSS': 10, 'TSW': 11, 'TWH': 9, 'TWS': 11, 'TWW': 12, 'S55':12 } #S55 is needed or else key isnt found
 
 indel_vector = [1 if e == 'B53' else 2 if e == 'CWW' else 3 for e in sorted(edge_map.keys())]
 
 
 def e_sub(e1_attr, e2_attr):
-    return sub_matrix[edge_map[e1_attr['label']]][edge_map[e2_attr['label']]]
+    return sub_matrix[edge_map[e1_attr['label'].upper()]][edge_map[e2_attr['label'].upper()]]
 
 def e_ins(e_attr):
-    return indel_vector[edge_map[e_attr['label']]]
+    return indel_vector[edge_map[e_attr['label'].upper()]]
     pass
 
 def e_del(e_attr):
-    return indel_vector[edge_map[e_attr['label']]]
+    return indel_vector[edge_map[e_attr['label'].upper()]]
     pass
 
 def n_ins(arg):

@@ -1,6 +1,5 @@
 """
     Hash function for graphlets.
-
     Input: Graphlet (nx)
     Output: hash code
 """
@@ -63,7 +62,6 @@ class Hasher:
     def hash(self, G):
         """
         WL hash of a graph.
-
         >>> import networkx as nx
         >>> G1 = nx.Graph()
         >>> G1.add_edges_from([(('4v6m_76.nx', ('B8', 627)), ('4v6m_76.nx', ('B8', 626)), {'label': 'B53'}),\
@@ -71,7 +69,6 @@ class Hasher:
         >>> G2 = nx.Graph()
         >>> G2.add_edges_from([(('4v6m_76.nx', ('B8', 654)), ('4v6m_76.nx', ('B8', 655)), {'label': 'B53'}),\
                                (('4v6m_76.nx', ('B8', 655)), ('4v6m_76.nx', ('B8', 656)), {'label': 'B53'})])
-
         >>> hasher = Hasher()
         >>> hasher.hash(G1) == hasher.hash(G2)
         True
@@ -178,7 +175,7 @@ def GED_hashtable_hashed(h_G, h_H, GED_table, graphlet_table, normed=True,
     """
         Produce a hash table that contains pairwise GEDs between graphs.
         {h_i:{h_j: d(G_i, G_j)}}
-        Collisions are resolved with an extra entry in the hash digest that gives the 
+        Collisions are resolved with an extra entry in the hash digest that gives the
         index of the graph in the bucket.
     """
 
@@ -191,8 +188,12 @@ def GED_hashtable_hashed(h_G, h_H, GED_table, graphlet_table, normed=True,
     except:
         pass
 
-    G = graphlet_table[h_G]['graph']
-    H = graphlet_table[h_H]['graph']
+    if not graphlet_table is None:
+        G = graphlet_table[h_G]['graph']
+        H = graphlet_table[h_H]['graph']
+    else:
+        G = h_G
+        H = h_H
 
 
     distance = ged(G,H, timeout=timeout)
@@ -204,7 +205,8 @@ def GED_hashtable_hashed(h_G, h_H, GED_table, graphlet_table, normed=True,
     # This is added by vincent, to use to be closer from the rest of the framework riso
     if similarity:
         similarity = np.exp(-beta * distance)
-        GED_table[h_G][h_H] = similarity
+        if not GED_table is None:
+            GED_table[h_G][h_H] = similarity
         return similarity
 
     elif normed:
@@ -213,7 +215,8 @@ def GED_hashtable_hashed(h_G, h_H, GED_table, graphlet_table, normed=True,
 
     # rna_draw_pair([G, H],
     # estimated_value=[0, d])
-    GED_table[h_G][h_H] = distance
+    if not GED_table is None:
+        GED_table[h_G][h_H] = distance
     return distance
 
 
@@ -300,4 +303,3 @@ if __name__ == "__main__":
         print(h)
         for g in data['graphs']:
             rna_draw(g, show=True)
-

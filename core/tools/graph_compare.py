@@ -63,26 +63,37 @@ def k_most_similar(g, motif_db, k=5):
 if __name__ == "__main__":
 
     import networkx as nx
+    import json
+    import _pickle as pickle
+    import pprint
 
-    G1 = nx.Graph()
-    G1.add_edges_from(
-        [
-            (1, 2, {"label": "CWW"}),
-            (2, 3, {"label": "B53"}),
-            (3, 1, {"label": "B53"}),
-            (1, 4, {"label": "CHS"}),
-            (4, 2, {"label": "THS"}),
-        ]
-    )
-    G2 = nx.Graph()
-    G2.add_edges_from(
-        [
-            (6, 7, {"label": "B53"}),
-            (7, 5, {"label": "B53"}),
-            (7, 8, {"label": "CWW"}),
-            (8, 9, {"label": "CWW"}),
-        ]
-    )
+    with open('./GraphData/response.json') as f:
+        js_graph = json.load(f) #json output from BayesPairing2
 
-    s =compare_graphs(G1, G2)
-    print(s)
+
+    with open('./GraphData/3dMotifAtlas_ALL_one_of_each_graph.cPickle', 'rb') as f2:
+        data_string = pickle.load(f2) #decodes cPickle into networkx
+
+
+    for y in js_graph["graphs"].keys():
+        res = {
+            "Graph": y,
+            "Value": 0.0,
+            "DatasetIndex": 0
+        }
+        g1 = nx.Graph()
+        g1.add_edges_from(
+            js_graph["graphs"][str(y)]["edges"]
+        )
+        for x in range(0, len(data_string)):
+            g2 = nx.Graph()
+            g2.add_edges_from(
+                data_string[x][0].edges.data()
+            )
+            val = compare_graphs(g1,g2)
+
+            if (val > res["Value"]):
+                res["Value"] = val 
+                res["DatasetIndex"] = x
+
+        print(res)

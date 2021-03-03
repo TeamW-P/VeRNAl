@@ -44,7 +44,6 @@ indel_vector = [1 if e == 'B53' else 2 if e == 'CWW' else 3 for e in sorted(EDGE
 
 def simfunc_from_hparams(hparams):
     """
-
     :param hparams:
     :return:
     """
@@ -71,7 +70,8 @@ class SimFunctionNode():
                  idf=False,
                  normalization=None,
                  hash_init='whole_v3',
-                 edge_map=EDGE_MAP):
+                 edge_map=EDGE_MAP,
+                 cache=True):
 
         POSSIBLE_METHODS = ['R_1', 'R_iso', 'R_graphlets', 'R_ged', 'hungarian', 'graphlet']
         assert method in POSSIBLE_METHODS
@@ -81,10 +81,18 @@ class SimFunctionNode():
         self.decay = decay
         self.normalization = normalization
 
+        self.cache = cache
+
         self.edge_map = edge_map
 
-        if self.method in ['R_ged', 'R_graphlets', 'graphlet']:
+        if self.cache:
             self.GED_table = defaultdict(dict)
+            self.hash_table = {}
+        else:
+            self.GED_table = None
+            self.hash_table = None
+
+        if cache and self.method in ['R_ged', 'R_graphlets', 'graphlet']:
             init_path = os.path.join(script_dir, '..', 'data', 'hashing', hash_init + '.p')
             print(f">>> loading hash table from {init_path}")
             self.hasher, self.hash_table = \
@@ -170,7 +178,6 @@ class SimFunctionNode():
     def delta_indices_sim(i, j, distance=False):
         """
         We need a scoring related to matching different nodes
-
         Returns a positive score in [0,1]
         :param i:
         :param j:
@@ -183,9 +190,7 @@ class SimFunctionNode():
     def get_cost_nodes(self, node_i, node_j, bb=False, pos=False):
         """
         Compare two nodes and returns a cost.
-
         Returns a positive number that has to be negated for minimization
-
         :param iso_matrix:
         :param bb : Check if what is being compared is backbone (no isostericity then)
         :param pos : Check if this is used within a ring (no indices then)
@@ -455,7 +460,6 @@ class SimFunctionNode():
     def graphlet(self, rings1, rings2):
         """
             Compare graphlet rings using GED and memoizing.
-
             1. Get list of graphlets and distances in subgraph: [(sG_hash_1, d_1), ..].
             2. Build graphlet distance matrix DM with GED
             3. Match the subgraphs with Hungarian, using DM for cost.
@@ -487,9 +491,7 @@ class SimFunctionNode():
         '''
         cost_matrix = np.array(
             [[self.graphlet_cost_nodes(node_i, node_j, pos=True) for node_j in ringlist2] for node_i in ringlist1])
-        
         row_ind, col_ind = linear_sum_assignment(cost_matrix)
-
         # This is a distance score, we turn in into a similarity with exp(-x)
         cost_raw = cost_matrix[row_ind, col_ind].sum()
         normed = np.exp(-cost_raw)
@@ -518,7 +520,6 @@ class SimFunctionNode():
 def graph_edge_freqs(graphs, stop=0):
     """
         Get IDF for each edge label over whole dataset.
-
         {'CWW': 110, 'TWW': 23}
     """
     graph_counts = Counter()
