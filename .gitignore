@@ -130,3 +130,5 @@ dmypy.json
 
 # general garbage
 .DS_Store/
+
+GraphData/

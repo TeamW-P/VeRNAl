@@ -46,17 +46,14 @@ def caller(graph_path=os.path.join(script_dir, '../data/samples_v2'), annot_id='
 def node_2_unordered_rings(G, v, depth=5, hasher=None):
     """
     Return rings centered at `v` up to depth `depth`.
-
     Return dict of dicts. One dict for each type of ring.
     Each inner dict is keyed by node id and its value is a list of lists.
     A ring is a list of lists with one list per depth ring.
-
     :param G:
     :param v:
     :param depth:
     :param: include_degrees: Whether to add a list of neighbor degrees to ring.
     :return:
-
     >>> import networkx as nx
     >>> G = nx.Graph()
     >>> G.add_edges_from([(1,2, {'label': 'A'}),\
@@ -66,7 +63,6 @@ def node_2_unordered_rings(G, v, depth=5, hasher=None):
     >>> rings = node_2_unordered_rings(G, 1, depth=2)
     >>> rings['edge']
     [[None], ['A', 'B'], ['C', 'A']]
-
     """
     G = G.to_undirected()
 
@@ -75,7 +71,7 @@ def node_2_unordered_rings(G, v, depth=5, hasher=None):
     if do_hash:
         graphlet_rings = [[hasher.hash(extract_graphlet(G, v))]]
     else:
-        graphlet_rings = None
+        graphlet_rings = [[extract_graphlet(G, v)]]
 
     node_rings = [[v]]
     edge_rings = [[None]]
@@ -99,6 +95,8 @@ def node_2_unordered_rings(G, v, depth=5, hasher=None):
                 if e_set not in visited_edges:
                     if do_hash:
                         children_graphlet.append(hasher.hash(extract_graphlet(G, nei)))
+                    else:
+                        children_graphlet.append(extract_graphlet(G, nei))
                     e_labels.append(G[node][nei]['label'])
                     visited_edges.add(e_set)
             ring_k.extend(children)
@@ -107,8 +105,7 @@ def node_2_unordered_rings(G, v, depth=5, hasher=None):
                 ring_k_graphlet.extend(children_graphlet)
         node_rings.append(ring_k)
         edge_rings.append(edge_ring_k)
-        if do_hash:
-            graphlet_rings.append(ring_k_graphlet)
+        graphlet_rings.append(ring_k_graphlet)
     # uncomment to draw root node
     # from tools.drawing import rna_draw
     # rna_draw(G, node_colors=['blue' if n == v else 'grey' for n in G.nodes()], show=True)
