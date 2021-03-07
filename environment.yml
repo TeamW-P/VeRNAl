@@ -22,10 +22,12 @@ dependencies:
   - cycler=0.10
   - decorator=4.4
   - dgl=0.4
+  - flask=1.1.2
   - freetype=2.10
   - google-auth=1.21
   - google-auth-oauthlib=0.4
   - grpcio=1.30
+  - gunicorn=20.0.4
   - idna=2.10
   - importlib-metadata=1.7
   - intel-openmp=2020.2

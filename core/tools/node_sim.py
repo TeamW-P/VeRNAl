@@ -20,7 +20,7 @@ if __name__ == "__main__":
 # from learning.timed_learning import train_model
 # from tools.rna_ged import ged
 # from tools.drawing import rna_draw_pair
-from tools.graphlet_hash import *
+from .graphlet_hash import *
 
 # GLOBAL VARIABLES
 

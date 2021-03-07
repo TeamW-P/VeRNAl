@@ -16,7 +16,7 @@ import multiprocessing as mlt
 import networkx as nx
 from tqdm import tqdm
 
-from tools.graphlet_hash import extract_graphlet, build_hash_table, Hasher
+from ..tools.graphlet_hash import extract_graphlet, build_hash_table, Hasher
 
 
 def cline():

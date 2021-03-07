@@ -11,8 +11,8 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 if __name__ == "__main__":
     sys.path.append(os.path.join(script_dir, '..'))
 
-from tools.ged_nx import graph_edit_distance
-from tools.ged_nx import optimize_graph_edit_distance
+from .ged_nx import graph_edit_distance
+from .ged_nx import optimize_graph_edit_distance
 
 iso_matrix = pickle.load(open(os.path.join(script_dir, '../data/iso_mat.p'), 'rb'))
 sub_matrix = np.ones_like(iso_matrix) - iso_matrix
@@ -30,7 +30,7 @@ sub_matrix[1:,0] = sys.maxsize
 
 
 edge_map = {'B53': 0, 'CHH': 1, 'CHS': 2, 'CHW': 3, 'CSH': 2, 'CSS': 4, 'CSW': 5, 'CWH': 3, 'CWS': 5, 'CWW': 6,
-            'THH': 7, 'THS': 8, 'THW': 9, 'TSH': 8, 'TSS': 10, 'TSW': 11, 'TWH': 9, 'TWS': 11, 'TWW': 12, 'S55':12 } #S55 is needed or else key isnt found
+            'THH': 7, 'THS': 8, 'THW': 9, 'TSH': 8, 'TSS': 10, 'TSW': 11, 'TWH': 9, 'TWS': 11, 'TWW': 12, 'S55': 1 } #S55 is needed or else key isnt found
 
 indel_vector = [1 if e == 'B53' else 2 if e == 'CWW' else 3 for e in sorted(edge_map.keys())]
 

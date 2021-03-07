@@ -7,6 +7,10 @@
 import sys
 import os
 from functools import partial
+import networkx as nx
+import json
+import _pickle as pickle
+import pprint
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 if __name__ == "__main__":
@@ -15,9 +19,9 @@ if __name__ == "__main__":
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
-from prepare_data.annotator import build_ring_tree_from_graph
-from tools.graphlet_hash import Hasher
-from tools.node_sim import SimFunctionNode
+from ..prepare_data.annotator import build_ring_tree_from_graph
+from .graphlet_hash import Hasher
+from .node_sim import SimFunctionNode
 
 def compare_graphs(g1, g2, depth=2):
     """
@@ -60,40 +64,51 @@ def k_most_similar(g, motif_db, k=5):
 
     return sorted(map(partial(compare_graphs, g), motif_db))[-k:]
 
-if __name__ == "__main__":
-
-    import networkx as nx
-    import json
-    import _pickle as pickle
-    import pprint
-
-    with open('./GraphData/response.json') as f:
+def k_most_similar_bp2(moduleLibraryPath, tempResponsePath):
+    
+    with open(tempResponsePath) as f:
         js_graph = json.load(f) #json output from BayesPairing2
 
 
-    with open('./GraphData/3dMotifAtlas_ALL_one_of_each_graph.cPickle', 'rb') as f2:
+    with open(moduleLibraryPath, 'rb') as f2:
         data_string = pickle.load(f2) #decodes cPickle into networkx
 
+    res = []
 
-    for y in js_graph["graphs"].keys():
-        res = {
-            "Graph": y,
-            "Value": 0.0,
-            "DatasetIndex": 0
-        }
-        g1 = nx.Graph()
-        g1.add_edges_from(
-            js_graph["graphs"][str(y)]["edges"]
-        )
-        for x in range(0, len(data_string)):
-            g2 = nx.Graph()
-            g2.add_edges_from(
-                data_string[x][0].edges.data()
+    for sequence in js_graph["motif_graphs"].keys():
+        sequenceData = []
+        for y in js_graph["motif_graphs"][sequence].keys():
+            graphAnalysis = {
+                "Graph": y,
+                "Value": 0.0,
+                "DatasetIndex": 0
+            }
+
+            g1 = nx.Graph()
+            g1.add_edges_from(
+                js_graph["motif_graphs"][sequence][str(y)]["edges"]
             )
-            val = compare_graphs(g1,g2)
+            for x in range(0, len(data_string)):
+                g2 = nx.Graph()
+                g2.add_edges_from(
+                    data_string[x][0].edges.data()
+                )
+                val = compare_graphs(g1,g2)
 
-            if (val > res["Value"]):
-                res["Value"] = val 
-                res["DatasetIndex"] = x
+                if (val > graphAnalysis["Value"]):
+                    graphAnalysis["Value"] = val 
+                    graphAnalysis["DatasetIndex"] = x
 
-        print(res)
+            sequenceData.append(graphAnalysis)
+        
+        res.append({sequence : sequenceData})
+        
+
+    return res
+
+#if __name__ == "__main__":
+    #print("")
+   
+    
+
+   

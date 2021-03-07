@@ -27,9 +27,9 @@ from networkx.algorithms import core_number
 
 from struct import *
 # from tools.drawing import rna_draw, rna_draw_pair
-from tools.graph_utils import bfs_expand
+from .graph_utils import bfs_expand
 # from tools.rna_ged import ged
-from tools.rna_ged_nx import ged
+from .rna_ged_nx import ged
 
 iso_matrix = pickle.load(open(os.path.join(script_dir, '../data/iso_mat.p'), 'rb'))
 sub_matrix = np.ones_like(iso_matrix) - iso_matrix
