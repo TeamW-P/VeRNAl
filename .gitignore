@@ -131,4 +131,4 @@ dmypy.json
 # general garbage
 .DS_Store/
 
-response.json
+./response.json
