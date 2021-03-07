@@ -23,6 +23,12 @@ from ..prepare_data.annotator import build_ring_tree_from_graph
 from .graphlet_hash import Hasher
 from .node_sim import SimFunctionNode
 
+'''
+from prepare_data.annotator import build_ring_tree_from_graph
+from tools.graphlet_hash import Hasher
+from tools.node_sim import SimFunctionNode
+'''
+
 def compare_graphs(g1, g2, depth=2):
     """
     Takes two 2.5D RNA graphs with edges having the 'label' attribute to be
@@ -64,14 +70,28 @@ def k_most_similar(g, motif_db, k=5):
 
     return sorted(map(partial(compare_graphs, g), motif_db))[-k:]
 
-def k_most_similar_bp2(moduleLibraryPath, tempResponsePath):
+def k_most_similar_bp2(moduleLibraryPath, tempResponsePath, dataset):
     
+
+
+
+   
     with open(tempResponsePath) as f:
         js_graph = json.load(f) #json output from BayesPairing2
 
 
+    
+
+    if (dataset.lower() == 'reliable'):
+        moduleLibraryPath += 'bayespairing_models_RELIABLE.json'
+    else:
+        moduleLibraryPath += 'bayespairing_models_ALL.json'
+
+
+    
+    
     with open(moduleLibraryPath, 'rb') as f2:
-        data_string = pickle.load(f2) #decodes cPickle into networkx
+        data_string = json.load(f2) #decodes cPickle into networkx
 
     res = []
 
@@ -91,7 +111,7 @@ def k_most_similar_bp2(moduleLibraryPath, tempResponsePath):
             for x in range(0, len(data_string)):
                 g2 = nx.Graph()
                 g2.add_edges_from(
-                    data_string[x][0].edges.data()
+                    data_string[str(x)]["master_graph"]["edges"]
                 )
                 val = compare_graphs(g1,g2)
 
@@ -107,8 +127,7 @@ def k_most_similar_bp2(moduleLibraryPath, tempResponsePath):
     return res
 
 #if __name__ == "__main__":
-    #print("")
-   
+    
     
 
    

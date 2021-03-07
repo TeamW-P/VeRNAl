@@ -18,9 +18,9 @@ def resource_not_found(e):
 @routes.route('/test', methods=['GET'])
 def vernal():
     print("Executing VERNAL similarity functions")
-    moduleLibraryPath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/3dMotifAtlas_ALL_one_of_each_graph.cPickle")
+    moduleLibraryPath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/")
     tempResponsePath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/response.json") #BP2 output
     
-    return jsonify(graph_compare.k_most_similar_bp2(moduleLibraryPath, tempResponsePath))
+    return jsonify(graph_compare.k_most_similar_bp2(moduleLibraryPath, tempResponsePath, dataset="ALL"))
 
 
