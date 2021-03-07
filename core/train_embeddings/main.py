@@ -41,7 +41,7 @@ if function == 'train':
     parser.add_argument("-wt", "--wall_time", type=int, default=None, help="Max time to run the model")
     parser.add_argument("-n", "--name", type=str, default='default_name', help="Name for the logs")
     parser.add_argument("-t", "--timed", help="to use timed learning", action='store_true')
-    parser.add_argument("-ep", "--num_epochs", type=int, help="number of epochs to train", default=30)
+    parser.add_argument("-ep", "--num_epochs", type=int, help="number of epochs to train", default=2) #30
     parser.add_argument("-dev", "--device", default=0, type=int, help="gpu device to use")
 
     # Kernel function arguments
