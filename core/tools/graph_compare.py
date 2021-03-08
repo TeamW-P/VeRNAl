@@ -72,12 +72,16 @@ def k_most_similar(g, motif_db, k=5):
 
 def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
     
+    '''
+    with open(bp2Output) as f:
+        js_graph = json.load(f) #json output from BayesPairing2
+    '''
     js_graph = bp2Output
 
     if (dataset.lower() == 'reliable'):
-        moduleLibraryPath += 'bayespairing_models_RELIABLE.json'
+        moduleLibraryPath += 'RELIABLE.json'
     else:
-        moduleLibraryPath += 'bayespairing_models_ALL.json'
+        moduleLibraryPath += 'ALL.json'
 
 
     with open(moduleLibraryPath, 'rb') as f2:
@@ -90,8 +94,8 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
         for y in js_graph["motif_graphs"][sequence].keys():
             graphAnalysis = {
                 "Graph": y,
-                "Value": 0.0,
-                "DatasetIndex": 0
+                "Value": [],
+                "DatasetIndex": []
             }
 
             g1 = nx.Graph()
@@ -105,9 +109,23 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
                 )
                 val = compare_graphs(g1,g2)
 
-                if (val > graphAnalysis["Value"]):
-                    graphAnalysis["Value"] = val 
-                    graphAnalysis["DatasetIndex"] = x
+                
+
+                if (val > 0.6):
+                    if (len(graphAnalysis["Value"]) >= 20):
+                        currWorst = min(graphAnalysis["Value"])
+                        if (currWorst < val):
+                            indexWorst = graphAnalysis["Value"].index(min(graphAnalysis["Value"]))
+                            del graphAnalysis["Value"][indexWorst]
+                            del graphAnalysis["DatasetIndex"][indexWorst]
+                        else:
+                            continue
+ 
+
+                    graphAnalysis["Value"].append(val) 
+                    graphAnalysis["DatasetIndex"].append(x)
+
+                    
 
             sequenceData.append(graphAnalysis)
         

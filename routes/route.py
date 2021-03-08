@@ -16,17 +16,19 @@ def resource_not_found(e):
     return jsonify(error=str(e)), 400
 
 
-@routes.route('/CompareSequence/<dataset>', methods=['POST'])
-def vernal(dataset):
+@routes.route('/CompareSequence/', methods=['POST'])
+def vernal():
 
     bp_output = "" 
+    dataset = ""
     try: 
         bp_output = eval(request.form.get("graphs"))
+        dataset = eval(request.form.get("dataset", default="ALL", type=str))
     except Exception as e:
         abort(400, "Vernal failed to process graph input: " + str(e))
     print("Executing VERNAL similarity functions with the ", dataset.upper(), " dataset")
     moduleLibraryPath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/")
     #tempResponsePath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/response.json") #BP2 output
-    return jsonify(graph_compare.k_most_similar_bp2(moduleLibraryPath, bp_output, dataset=dataset))
+    return jsonify(graph_compare.k_most_similar_bp2(moduleLibraryPath, bp_output, dataset))
 
 
