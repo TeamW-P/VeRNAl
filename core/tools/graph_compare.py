@@ -70,17 +70,9 @@ def k_most_similar(g, motif_db, k=5):
 
     return sorted(map(partial(compare_graphs, g), motif_db))[-k:]
 
-def k_most_similar_bp2(moduleLibraryPath, tempResponsePath, dataset):
+def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
     
-
-
-
-   
-    with open(tempResponsePath) as f:
-        js_graph = json.load(f) #json output from BayesPairing2
-
-
-    
+    js_graph = bp2Output
 
     if (dataset.lower() == 'reliable'):
         moduleLibraryPath += 'bayespairing_models_RELIABLE.json'
@@ -88,8 +80,6 @@ def k_most_similar_bp2(moduleLibraryPath, tempResponsePath, dataset):
         moduleLibraryPath += 'bayespairing_models_ALL.json'
 
 
-    
-    
     with open(moduleLibraryPath, 'rb') as f2:
         data_string = json.load(f2) #decodes cPickle into networkx
 
