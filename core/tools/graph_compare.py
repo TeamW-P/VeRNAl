@@ -72,11 +72,9 @@ def k_most_similar(g, motif_db, k=5):
 
 def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
     
-    '''
-    with open(bp2Output) as f:
-        js_graph = json.load(f) #json output from BayesPairing2
-    '''
-    js_graph = bp2Output
+    
+    
+    js_graph = bp2Output #json output from BayesPairing2
 
     if (dataset.lower() == 'reliable'):
         moduleLibraryPath += 'RELIABLE.json'
@@ -112,7 +110,7 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
                 
 
                 if (val > 0.6):
-                    if (len(graphAnalysis["Value"]) >= 20):
+                    if (len(graphAnalysis["Value"]) >= 5): #save top 5
                         currWorst = min(graphAnalysis["Value"])
                         if (currWorst < val):
                             indexWorst = graphAnalysis["Value"].index(min(graphAnalysis["Value"]))
