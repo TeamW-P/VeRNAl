@@ -1,8 +1,9 @@
 import pickle
 import os
-from flask import jsonify, abort, Blueprint
+from flask import jsonify, abort, Blueprint, request
 import sys
 import os
+import json
 from core.tools import graph_compare 
 
 
@@ -15,12 +16,18 @@ def resource_not_found(e):
     return jsonify(error=str(e)), 400
 
 
-@routes.route('/test', methods=['GET'])
+@routes.route('/CompareSequence/', methods=['POST'])
 def vernal():
-    print("Executing VERNAL similarity functions")
-    moduleLibraryPath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/3dMotifAtlas_ALL_one_of_each_graph.cPickle")
-    tempResponsePath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/response.json") #BP2 output
-    
-    return jsonify(graph_compare.k_most_similar_bp2(moduleLibraryPath, tempResponsePath))
+
+    try: 
+        bp_output = request.files["graphs"]
+        bp2ProcessedData = json.load(bp_output)
+        datasetName = request.form.get("dataset", type=str)
+        print("Executing VERNAL similarity functions with the ", datasetName.upper(), " dataset")
+        moduleLibraryPath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/")
+        return jsonify(graph_compare.k_most_similar_bp2(moduleLibraryPath, bp2ProcessedData, datasetName))
+    except Exception as e:
+        abort(400, "Vernal failed to process graph input: " + str(e))
+
 
 
