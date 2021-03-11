@@ -20,18 +20,13 @@ def resource_not_found(e):
 def vernal():
 
     try: 
-        bp2ProcessedData = ""
-        try: 
-            bp_output = request.files["graphs"]
-            bp2ProcessedData = json.load(bp_output)
-        except:
-            bp_output = request.form.get("graphs")
-            bp2ProcessedData = json.loads(bp_output)
+        bp_output = request.form.get("graphs")
+        bp2ProcessedData = json.loads(bp_output)
         
         datasetName = request.form.get("dataset", type=str)
         print("Executing VERNAL similarity functions with the ", datasetName.upper(), " dataset")
         moduleLibraryPath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/")
-        return jsonify(graph_compare.k_most_similar_bp2(moduleLibraryPath, bp2ProcessedData, datasetName))
+        res = str(graph_compare.k_most_similar_bp2(moduleLibraryPath, bp2ProcessedData, datasetName))
     except Exception as e:
         abort(400, "Vernal failed to process graph input: " + str(e))
 
