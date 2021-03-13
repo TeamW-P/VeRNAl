@@ -85,6 +85,9 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
     with open(moduleLibraryPath, 'rb') as f2:
         data_string = json.load(f2) #decodes cPickle into networkx
 
+    vernalOutput = {
+        "vernalOutput": []
+    }
     res = []
 
     for sequence in js_graph["motif_graphs"].keys():
@@ -128,9 +131,12 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
             sequenceData.append(graphAnalysis)
         
         res.append({sequence : sequenceData})
+
+
+    vernalOutput["vernalOutput"] = res
         
 
-    return res
+    return vernalOutput
 
 #if __name__ == "__main__":
     

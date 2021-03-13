@@ -26,7 +26,8 @@ def vernal():
         datasetName = request.form.get("dataset", type=str)
         print("Executing VERNAL similarity functions with the ", datasetName.upper(), " dataset")
         moduleLibraryPath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/")
-        res = str(graph_compare.k_most_similar_bp2(moduleLibraryPath, bp2ProcessedData, datasetName))
+        res = graph_compare.k_most_similar_bp2(moduleLibraryPath, bp2ProcessedData, datasetName)
+        return res
     except Exception as e:
         abort(400, "Vernal failed to process graph input: " + str(e))
 
