@@ -16,7 +16,7 @@ def resource_not_found(e):
     return jsonify(error=str(e)), 400
 
 
-@routes.route('/CompareSequence/', methods=['POST'])
+@routes.route('/compare-sequence/', methods=['POST'])
 def vernal():
 
     try: 
