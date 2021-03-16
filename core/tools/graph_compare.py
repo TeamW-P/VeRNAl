@@ -90,9 +90,9 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
     }
     res = []
 
-    for sequence in js_graph["motif_graphs"].keys():
+    for sequence in js_graph.keys():
         sequenceData = []
-        for y in js_graph["motif_graphs"][sequence].keys():
+        for y in js_graph[sequence].keys():
             graphAnalysis = {
                 "Graph": y,
                 "Value": [],
@@ -101,7 +101,7 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
 
             g1 = nx.Graph()
             g1.add_edges_from(
-                js_graph["motif_graphs"][sequence][str(y)]["edges"]
+                js_graph[sequence][str(y)]["edges"]
             )
             for x in range(0, len(data_string)):
                 g2 = nx.Graph()
