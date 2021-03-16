@@ -99,5 +99,5 @@ dependencies:
   - zstd=1.4
   - pip:
     - multiset==2.1
-    - libgfortran=3.0
+    - libgfortran==3.0
 
