@@ -76,6 +76,10 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
     
     js_graph = bp2Output #json output from BayesPairing2
 
+
+    siblingIndices = [] #all indices here cannot be used
+
+
     if (dataset.lower() == 'reliable'):
         moduleLibraryPath += 'RELIABLE.json'
     else:
@@ -112,7 +116,8 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
 
                 
 
-                if (val > 0.6):
+                if (val > 0.6 and (x not in siblingIndices)):
+
                     if (len(graphAnalysis["Value"]) >= 5): #save top 5
                         currWorst = min(graphAnalysis["Value"])
                         if (currWorst < val):
@@ -123,6 +128,7 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
                             continue
  
 
+                    siblingIndices = siblingIndices + data_string[str(x)]["siblings"]
                     graphAnalysis["Value"].append(val) 
                     graphAnalysis["DatasetIndex"].append(x)
 
