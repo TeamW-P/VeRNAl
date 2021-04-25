@@ -90,7 +90,7 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
         data_string = json.load(f2) #decodes cPickle into networkx
 
     vernalOutput = {
-        "vernalOutput": []
+        "similar_motifs": []
     }
     res = []
 
