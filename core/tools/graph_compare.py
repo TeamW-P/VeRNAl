@@ -95,10 +95,10 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
     res = []
 
     for sequence in js_graph.keys():
-        sequenceData = []
+        sequenceData = {}
         for y in js_graph[sequence].keys():
             graphAnalysis = {
-                "Graph": y,
+                
                 "Value": [],
                 "DatasetIndex": []
             }
@@ -134,7 +134,7 @@ def k_most_similar_bp2(moduleLibraryPath, bp2Output, dataset):
 
                     
 
-            sequenceData.append(graphAnalysis)
+            sequenceData[y] = graphAnalysis
         
         res.append({sequence : sequenceData})
 
