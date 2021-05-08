@@ -1,0 +1,3 @@
+{
+    "error": "400 Bad Request: Vernal failed to process graph input: malformed node or string: <_ast.Name object at 0x7f8885c981c0>"
+}
