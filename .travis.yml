@@ -16,4 +16,4 @@ install:
  - conda env create -f environment.yml
  - conda activate vernal
 script:
- - python -m unittest tests.GraphCompareTest.py
+ - python -m unittest tests.GraphCompareTest
