@@ -11,13 +11,16 @@ from app import app
 
 CURRENT_DIRECTORY = os.path.dirname(__file__)
 
+with open(os.path.join(CURRENT_DIRECTORY, "inputdata/SAMPLE_VERNAL_INPUT.json")) as f:
+    VERNAL_INPUT = json.load(f)
+f.close()
+
 
 class GraphCompareTests(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
 
-    
     def test_invalid_input_provided(self):
         '''
         Check if Vernal fails gracefully with no input
@@ -45,7 +48,7 @@ class GraphCompareTests(unittest.TestCase):
         '''
         Check if Vernal fails gracefully with invalid json input
         '''
-        payload = dict(graphs={"nothinghere":"nothing"}, dataset="RELIABLE")
+        payload = dict(graphs={"nothinghere": "nothing"}, dataset="RELIABLE")
 
         headers = {}
 
@@ -64,13 +67,18 @@ class GraphCompareTests(unittest.TestCase):
         self.assertEqual('error' in expected_response,
                          'error' in response.json)
 
-    def test_invalid_dataset_provided(self):
+    def test_invalid_dataset_provided(self):  # fail
         '''
         Check if Vernal defaults to a usable dataset if an invalid dataset is provided
         '''
+        with open(os.path.join(CURRENT_DIRECTORY, "inputdata/SAMPLE_VERNAL_INPUT.json")) as f:
+            VERNAL_INPUT = json.load(f)
+        f.close()
+
         letters = string.ascii_lowercase
         dataset_name = ''.join(random.choice(letters) for i in range(10))
-        payload = dict(graphs=VERNAL_INPUT, dataset=dataset_name)
+
+        payload = dict(graphs=str(VERNAL_INPUT), dataset=dataset_name)
 
         print(dataset_name)
         headers = {}
@@ -89,12 +97,18 @@ class GraphCompareTests(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(expected_response, response.json)
 
-    def test_successful_graph_compare_alldataset(self):
+    def test_successful_graph_compare_alldataset(self):  # fail
         '''
         Verify Vernal output given a valid input and the ALL dataset
         '''
-        payload = dict(graphs=VERNAL_INPUT, dataset="ALL")
 
+        with open(os.path.join(CURRENT_DIRECTORY, "inputdata/SAMPLE_VERNAL_INPUT.json")) as f:
+            VERNAL_INPUT = json.load(f)
+        f.close()
+
+        payload = dict(graphs=str(VERNAL_INPUT), dataset="ALL")
+
+        print(payload)
         headers = {}
 
         response = self.app.post(
@@ -108,14 +122,21 @@ class GraphCompareTests(unittest.TestCase):
             expected_response = json.load(f)
         f.close()
 
+        print(response.json)
+
         self.assertEqual(200, response.status_code)
         self.assertEqual(expected_response, response.json)
 
-    def test_successful_graph_compare_reliabledataset(self):
+    def test_successful_graph_compare_reliabledataset(self):  # fail
         '''
         Verify Vernal output given a valid input and the RELIABLE dataset
         '''
-        payload = dict(graphs=VERNAL_INPUT, dataset="RELIABLE")
+
+        with open(os.path.join(CURRENT_DIRECTORY, "inputdata/SAMPLE_VERNAL_INPUT.json")) as f:
+            VERNAL_INPUT = json.load(f)
+        f.close()
+
+        payload = dict(graphs=str(VERNAL_INPUT), dataset="RELIABLE")
 
         headers = {}
 
