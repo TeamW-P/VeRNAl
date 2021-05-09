@@ -1,5 +1,5 @@
 # vernal: Fuzzy Recurrent Subgraph Mining
-
+[![Build Status](https://travis-ci.com/TeamW-P/VeRNAl.svg?branch=main)](https://travis-ci.com/TeamW-P/VeRNAl)
 
 ![](images/vernal-img.png)
 
