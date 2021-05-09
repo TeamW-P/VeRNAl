@@ -27,6 +27,13 @@ def vernal():
         representative_graphs = ast.literal_eval(request.form.get("graphs"))
         
         datasetName = request.form.get("dataset", type=str)
+
+        if (datasetName.upper() == 'RELIABLE'):
+            datasetName = 'RELIABLE'
+        else:
+            if (datasetName.upper() != 'ALL'):
+                print("Invalid dataset provided, default to ALL dataset")
+            datasetName = 'ALL'
         print("Executing VERNAL similarity functions with the ", datasetName.upper(), " dataset")
         moduleLibraryPath = os.path.join(CURRENT_DIRECTORY, "../core/tools/GraphData/")
         res = graph_compare.k_most_similar_bp2(moduleLibraryPath, representative_graphs, datasetName)
