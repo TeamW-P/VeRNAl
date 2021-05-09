@@ -27,6 +27,7 @@ def vernal():
         representative_graphs = ast.literal_eval(request.form.get("graphs"))
         
         datasetName = request.form.get("dataset", type=str)
+
         if (datasetName.upper() == 'RELIABLE'):
             datasetName = 'RELIABLE'
         else:
